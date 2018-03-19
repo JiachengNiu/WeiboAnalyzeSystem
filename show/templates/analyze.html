@@ -1,0 +1,237 @@
+﻿$def with (keyword, freqs, dates, items, results, words, sum_types, sum_values, type, imgsrc)
+<div class="page-header" align="center" style="margin-bottom:0px">
+    <h1 style="margin-top:-20px"><a href="\">微博实时热点分析系统</a></h1>
+    <!-- <p class="text-success" style="margin-bottom:0px"><a href="/en">English Version</a></p> -->
+</div>
+$code:
+	max_value = max(sum_values)
+	types = []
+	values = []
+	wordfreqs = []
+	wordlist = []
+	for i in results:
+		types.append(i[0])
+		values.append(i[1])
+	for i in words:
+		wordlist.append(i[0])
+		wordfreqs.append(i[1])
+	
+	
+
+
+<div style="margin-bottom:10px"><button type="button" class="btn btn-default btn-block" onclick="javascript:window.history.back(-1);">返回上一页 (Back to Previous Page)</button></div>
+<h2 style="color:#FF8000">$keyword</h2>
+<span class="label label-default" style="margin-left:1%">$type</span>
+<br/><span style="color:#CCCCCC">（基于朴素贝叶斯模型的分类结果）</span><br/><br/>
+
+
+<!--
+<div id="radarMain" style="height:60vh; width:60vw"></div>
+<br/><br/>
+-->
+<div class="container" style="width:100%;border:1px solid #CCCCCC">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="lineMain" style="height:43vh; width:43vw"></div><br/><br/></div>
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="radarMain" style="height:43vh; width:43vw"></div>
+$for t in types:
+	<span class="label label-default" style="margin-left:1%">$t</span>
+<br/><br/></div>
+</div>
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="barMain" style="height:43vh; width:43vw"></div></div>
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><span style="font-family:sans-serif; font-size:18px; color:#333333; font-style:normal; font-weight:bold">$keyword·词云</span><br/>
+<img src="$imgsrc" align="middle" style="height:43vh; width:35vw"/></div>
+</div>
+</div>
+<br/>
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_line = echarts.init(document.getElementById('lineMain'));
+	// 指定图表的配置项和数据
+	var option = {
+    "series": [
+        {
+            "type": "line", 
+            "data": $freqs, 
+            "name": "搜索指数"
+        }
+    ], 
+    "yAxis": [
+        {}
+    ], 
+    "legend": {
+		right: '20%',
+		top: '8%',
+        "data": [
+            "搜索指数"
+        ], 
+        "orient": "horizontal"
+    }, 
+    "xAxis": [
+        {
+            "position": "bottom", 
+            "data": [
+			$for i in range(len(dates)):
+				$if i < len(dates) - 1:
+					"$dates[i]",
+				$else:
+					"$dates[i]"
+			], 
+			"axisLabel":{
+                show:true,
+                interval: $(len(dates)/10),  
+                rotate: 15,
+                margin: 8        
+            },
+            "type": "category"
+        }
+    ], 
+    "title": {
+        "text": "搜索指数变化趋势分析",
+		"left": "center"
+    }
+};
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart_line.setOption(option);
+</script>
+
+<script type="text/javascript">
+function escape2Html(str) { 
+ var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'}; 
+ return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];}); 
+}
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_radar = echarts.init(document.getElementById('radarMain'));
+	// 指定图表的配置项和数据
+	var option = {
+    title: {
+        text: '基于TF-IDF词权重的热点成分分析结果',
+		"left": "center",
+    },
+    tooltip: {},
+    legend: {
+		right: '20%',
+		top: '8%',
+        data: ['热点成分']
+    },
+    radar: {
+        // shape: 'circle',
+        indicator: [
+		$for t in sum_types:
+			{ name: '$t', max: $max_value},
+        ]
+    },
+    series: [{
+        type: 'radar',
+        // areaStyle: {normal: {}},
+        data : [
+            {
+                value : [
+				$for v in sum_values:
+					$v,
+				],
+                name : '热点成分'
+            },
+        ]
+    }]
+};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart_radar.setOption(option);
+</script>
+
+
+<table id='table' class="table table-hover table-bordered table-striped" style="text-align:center">
+<thead class="table-bordered">
+	<tr>
+		<th data-align="center" data-sortable="True" data-valign="middle"><strong>相关微博条目</strong></th>
+	</tr>	
+</thead>
+</table>
+
+<script>
+function escape2Html(str) { 
+ var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'}; 
+ return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];}); 
+}
+
+$$('#table').bootstrapTable({
+	search: 'True',
+	pagination: 'True',
+	sortStable: 'True',
+	pageSize: 10,
+	formatLoadingMessage: function(){
+    return;
+  },
+	data:
+	[
+	$for item in items:
+		["$item.content"],
+	]
+});
+</script>
+</br>
+
+
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_bar = echarts.init(document.getElementById('barMain'));
+	// 指定图表的配置项和数据
+	var option = {
+	"series": [
+		{
+			"type": "bar", 
+			"data": $wordfreqs, 
+			"name": "词频"
+		}
+	], 
+	"yAxis": [
+		{}
+	], 
+	"legend": {
+		right: '20%',
+		top: '8%',
+		"data": [
+			"词频"
+		], 
+		"orient": "horizontal"
+	}, 
+	"xAxis": [
+		{
+			"position": "bottom", 
+			"data": [
+			$for i in range(len(wordlist)):
+				$if i < len(wordlist) - 1:
+					"$wordlist[i]",
+				$else:
+					"$wordlist[i]"
+			],
+			"axisLabel":{
+                show:true,
+                interval: 0,  
+                rotate: 45,
+                margin: 8        
+            },
+			"type": "category"
+		}
+	], 
+	"title": {
+		"text": "热点相关内容高频词频统计分析", 
+		"left": "center"
+	}
+};
+
+		// 使用刚指定的配置项和数据显示图表。
+		myChart_bar.setOption(option);
+		//window.onresize = myChart_bar.resize;
+</script>
+
+<script type="text/javascript">
+window.addEventListener("resize", function () {
+    myChart_line.resize();
+	myChart_radar.resize();
+	myChart_bar.resize();
+ });
+</script>

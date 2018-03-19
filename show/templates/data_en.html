@@ -1,0 +1,177 @@
+$def with (words, types, values, type, content)
+<div class="page-header" align="center" style="margin-bottom:0px">
+    <blockquote style="margin-top:0px; margin-bottom:0px">
+        <h1 style="margin-top:-32px; margin-bottom:0px"><a href="/en">Real-time Hotspot in China</a></h1>
+        <small>Based on Sina Microblog Data</small>
+    </blockquote>
+    <p class="text-success" style="margin-top:-10px;margin-bottom:0px"><a href="/data">中文版</a></p>
+</div>
+
+$code:
+	if len(values) > 0:
+		max_value = max(values)
+	else:
+		max_value = 0
+	wordfreqs = []
+	wordlist = []
+	for i in words:
+		wordlist.append(i[0])
+		wordfreqs.append(i[1])
+	imgsrc = '/static/pictures/data.png'
+
+$code:
+    typedict = {u'财经': 'Finance', u'萌宠': 'Pet', u'体育': 'Sports', u'婚庆': 'Wedding', u'综艺': 'Arts', u'情感': 'Emotions', u'美女模特': 'Beauty', u'军事': 'Military', u'设计': 'Design', u'收藏': 'Collection', u'政务': 'Government', u'国际': 'International', u'社会': 'Society', u'股市': 'Stock', u'游戏': 'Games', u'运动健身': 'Fitness', u'电影': 'Movie', u'育儿': ' Parenting', u'养生': 'Wellness', u'美妆': 'Makeup', u'科技': 'Technology', u'旅游': 'Travel', u'法律': 'Law', u'明星': 'Star', u'星座': 'Constellation', u'辟谣': 'Refute Rumor', u'艺术': 'Art', u'三农': 'Agriculture', u'搞笑': 'Funny', u'音乐': 'Music', u'校园': 'Campus', u'动漫': 'Anime', u'汽车': 'Car', u'读书': 'Reading', u'美图': 'Picture', u'房产': 'Estate', u'健康': 'Health', u'瘦身': 'Slimming', u'宗教': 'Religion', u'科普': 'Popular Science', u'历史': ' History ', u'家居': 'Home', u'电视剧': 'Drama', u'正能量': 'Positive Energy', u'数码': 'Digital', u'美食': 'Gourmet', u'时尚': 'Fashion'}
+
+		
+<ul class="nav nav-tabs nav-justified">
+	<li><a href="/en">Homepage (Introduction)</a></li>
+	<li><a href="/hotspot/en">Real-time Hotspot List</a></li>
+	<li><a href="/weibo/en">Related Microblog</a></li>
+	<li><a href="/timeline/en">Timeline</a></li>
+	<li class="active"><a href="#">Data Analysis Platform</a></li>
+</ul>
+<a href="/data/en"><button class="btn btn-default btn-block">Refresh</button></a>
+<div style="margin-top:-20px"><form method="POST" role="form" style="width:60%">
+	<div class="form-group" style="margin-top:3%">
+		<label for="name" style="font-size:16px" style="background-color:#CCCCCC">Please enter text content for online analysis:</label>
+		<textarea class="form-control" rows="3" name="text">$content</textarea>
+	</div>
+	<div class="form-group" style="width:15%">
+		<button type="submit" class="btn btn-primary btn-block">Analyze</button>
+	</div>
+</form></div>
+
+
+$if len(types) > 0 and len(words) > 0:
+	Classification result based on Naive Baysian Model:<br/><span class="label label-default" style="margin-left:1%">$typedict[type]</span>
+	<br/><br/>
+
+	<div class="container" style="width:100%;border:1px solid #CCCCCC">
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="radarMain" style="height:43vh; width:43vw"></div></div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="barMain" style="height:43vh; width:43vw"></div></div>
+	</div>
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="border:1px solid #CCCCCC"><br/><span style="font-family:sans-serif; font-size:18px; color:#333333; font-style:normal; font-weight:bold">Wordcloud</span><br/>
+	<img src="$imgsrc" align="middle" style="width:50vw"/></div>
+	</div>
+	</div>
+	<br/>
+	
+$elif content != None and len(content) > 0:
+	The text you entered is not enough for the system to analyze valuable information. Please enter more contents.<br/>
+	<div class="container" style="width:100%;border:1px solid #CCCCCC">
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="barMain" style="height:43vh; width:43vw"></div></div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><span style="font-family:sans-serif; font-size:18px; color:#333333; font-style:normal; font-weight:bold">Wordcloud</span><br/><img src="$imgsrc" align="middle" style="height:43vh; width:35vw"/></div>
+	</div>
+	</div>
+	<br/>
+
+$else:
+	$pass
+	
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_radar = echarts.init(document.getElementById('radarMain'));
+	// 指定图表的配置项和数据
+	var option = {
+	title: {
+        text: 'Analysis Result Based on TF-IDF Weight',
+		"left": "center"
+	},
+	tooltip: {},
+	legend: {
+		right: '20%',
+		top: '8%',
+		data: ['Content Components']
+	},
+	radar: {
+		// shape: 'circle',
+		indicator: [
+		$for t in types:
+			{ name: '$typedict[t]', max: $max_value},
+		]
+	},
+	series: [{
+		type: 'radar',
+		// areaStyle: {normal: {}},
+		data : [
+			{
+				value : [
+				$for v in values:
+					$v,
+				],
+                name: 'Content Components'
+			},
+		]
+	}]
+};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart_radar.setOption(option); 
+</script>
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_bar = echarts.init(document.getElementById('barMain'));
+	// 指定图表的配置项和数据
+	var option = {
+	"series": [
+		{
+			"type": "bar", 
+			"data": $wordfreqs, 
+			"name": "Word Frequency"
+		}
+	], 
+	"yAxis": [
+		{}
+	], 
+	"legend": {
+		right: '20%',
+		top: '8%',
+		"data": [
+			"Word Frequency"
+		], 
+		"orient": "horizontal"
+	}, 
+	"xAxis": [
+		{
+			"position": "bottom", 
+			"data": [
+			$for i in range(len(wordlist)):
+				$if i < len(wordlist) - 1:
+					"$wordlist[i]",
+				$else:
+					"$wordlist[i]"
+			],
+			"axisLabel":{
+				show:true,
+				interval: 0,  
+				rotate: 45,
+				margin: 8        
+			},
+			"type": "category"
+		}
+	], 
+	"title": {
+		"text": "Word Frequency Analysis of Hotspot-related Contents", 
+		"left": "center"
+	}
+};
+
+	// 使用刚指定的配置项和数据显示图表。
+	myChart_bar.setOption(option);
+</script>
+
+<script type="text/javascript">
+window.addEventListener("resize", function () {
+	myChart_radar.resize();
+	myChart_bar.resize();
+ });
+</script>
+
+
+
+
+

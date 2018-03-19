@@ -1,0 +1,177 @@
+$def with ()
+<div class="page-header" align="center" style="margin-bottom:0px">
+    <h1 style="margin-top:-20px"><a href="\">微博实时热点分析系统</a></h1>
+    <p class="text-success" style="margin-bottom:0px"><a href="/en">English Version</a></p>
+</div>
+
+<ul class="nav nav-tabs nav-justified">
+	<li class="active" id='home'><a href="#">主页（系统介绍）</a></li>
+	<li id='hotspot'><a href="/hotspot">实时热点</a></li>
+	<li id='weibo'><a href="weibo">热点相关微博</a></li>
+	<li id='timeline'><a href="timeline">时间线</a></li>
+	<li id='platform'><a href="data">在线数据分析平台</a></li>
+</ul><br/>
+<div class="container" style="width:100%">
+<div class="row">
+
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					系统框架
+				</h3>
+			</div>
+			<div class="panel-body">
+				<img src="static/pictures/frame.png" width="100%"/>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					系统简介
+				</h3>
+			</div>
+			<div class="panel-body">
+				<p align="left" style="text-indent:2em">新浪微博通过提取、归并被用户大量搜索的词条并按搜索指数排序，建立了实时热搜榜。该榜单能够较为客观地反映实时发生的热点事件。本系统通过对微博实时热点进行分析，为用户提供更为优质的热点资讯服务，实现热点追踪、舆情监测等功能。此外，本系统还提供了对用户输入的自定义文本内容的数据分析服务。</p>				
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					系统模块
+				</h3>
+			</div>
+			<div class="panel-body" align="left">
+				<ul>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="数据获取模块" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>数据获取模块主要获取三类数据：微博实时热搜榜的榜单，实时热搜榜榜单上的词条分别对应的搜索结果页面中的微博条目，热门微博页面的微博及其对应的类别。其中前两类数据直接传入数据存储模块的数据库中保存，最后一类数据则以文本文档的形式保存到本地，作为机器学习模块的训练集。</p>">数据获取模块</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="数据存储模块" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>本系统的数据存储模块即为数据库，数据库类型为MySQL。在数据存储模块接收到数据分析模块输入的SELECT（查询）语句之后，会输出相应的SQL查询结果，供数据分析模块进行数据分析。</p>">数据存储模块</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="机器学习模块" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>机器学习模块与系统的其他模块相比相对独立，不需要与数据存储模块的数据库发生交互，在经过一次机器学习训练后，所得的分类器模型可以一直为系统所用，直到系统需要更新机器学习的训练集或算法。</p>">机器学习模块</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="数据分析模块" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>数据分析模块是整个系统的后端的核心，用户在系统前端看到的所有数据都来自于数据分析模块。数据分析模块会根据前端的请求，对数据存储模块输入SQL查询语句，得到相应的查询结果，然后按照需求进行特定的数据分析，并将分析后的数据传回系统前端进行可视化的展示。</p>">数据分析模块</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="前端展示模块" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>前端展示模块是系统的门面，主要实现数据可视化的功能，用户能直接接触到的页面都来自前端展示模块。</p>">前端展示模块</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					系统功能
+				</h3>
+			</div>
+			<div class="panel-body" align="left">
+				<ul>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="微博热点（热搜词条）自动分类" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>该功能的实现首先需获取到热搜词条对应的微博搜索结果，并将这些与词条相关的微博搜索结果作为原热搜词条语义和特征的扩展，将它们结合为一个数据量更大的中文文本单元，然后用系统内置的中文文本分类器模型进行分类。</p>">微博热点（热搜词条）自动分类</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="在线数据分析平台" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>该功能是向用户提供数据分析的端口，待分析数据由用户提供，系统会对其进行词频统计分析、类别成分分析并生成词云图。</p>">在线数据分析平台</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="热点或微博内容抽取" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>本系统数据源全部来自于新浪微博，系统内置了相应的爬虫，能够从微博获取数据并抽取所需字段，然后存入数据库的对应数据表中，供系统查询和分析。</p>">热点或微博内容抽取</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="数据驱动的热点随时间变化趋势的图表" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>本系统的图表采用Echarts框架，系统会根据需要，将数据分析和处理后传入前端，通过JS代码生成相应图表。</p>">数据驱动的热点随时间变化趋势的图表</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="数据驱动的时间线视图" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>每个热点都有自己的时效性，对系统中的所有热点，系统提供了一个专门的页面，向用户展示一条连贯的时间线，时间线上的每个时间点对应着该时间发生的热点事件，从而达到舆情监测和提高用户体验的目的。</p>">数据驱动的时间线视图</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="数据驱动的文本词云图" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>系统在Python后端对文本内容进行切词和词频统计，在去除停用词后，系统会根据词频调整每个词的大小，生成词云图并保存到系统图片目录，然后在前端展示给用户，实现文本可视化。</p>">数据驱动的文本词云图</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="按关键词检索功能和分面组配的筛选功能" data-container="body" data-placement="right" data-content="<p align='left' style='text-indent:2em'>用户可以在系统前端搜索关键词或设置筛选条件执行数据筛选，然后系统会与数据库发生查询交互并将返回结果展示在前端，让用户可以快速找到自己需要的结果。</p>">按关键词检索功能和分面组配的筛选功能</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					特别致谢
+				</h3>
+			</div>
+			<div class="panel-body">
+				<p align="left" style="text-indent:2em">本系统作为我的毕业论文的最终成果，花费的时间和精力对于我而言是前所未有的。仅服务器的上线版本就历经了十次更新，与之对应的论文也在不断地修改。当然，最终系统的竣工带给我的成就感是无与伦比的。</p>
+				<p align="left" style="text-indent:2em">在此，我要感谢我的导师王继民教授，他的指导让我的论文一直朝着正确的方向发展；感谢北京大学信息管理系，大学四年间学到的知识和技能让我有能力最终实现这个系统；感谢开发团队的编程大神们实现的开源工具包，让我能够在自己的系统中集成各种各样酷炫的功能，你们是我努力的方向。</p>
+			</div>
+		</div>
+	</div>	
+</div>
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					用到的工具
+				</h3>
+			</div>
+			<div class="panel-body" style="background-image:url(static/pictures/tools/bg.jpg); background-size: cover; color:#FFFFFF; font-size:20px">
+				<table width="100%" class="table table-bordered" style="text-align:center; font-family:'隶书'; margin-bottom:0px">
+				<tr>
+				<td width="25%" style="vertical-align:middle !important">前端</td>
+				<td width="25%"><a href="http://echarts.baidu.com/" target="_blank"><img src="static/pictures/tools/echarts.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://getbootstrap.com/" target="_blank"><img src="static/pictures/tools/bootstrap.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://jquery.com/" target="_blank"><img src="static/pictures/tools/jquery.png" width="40%" height="30vh"/></a></td>
+				</tr>
+				<tr>
+				<td width="25%" style="vertical-align:middle !important">后端</td>
+				<td width="25%"><a href="https://www.python.org/" target="_blank"><img src="static/pictures/tools/python.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://scikit-learn.org/stable/" target="_blank"><img src="static/pictures/tools/scikit-learn.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://webpy.org/" target="_blank"><img src="static/pictures/tools/webpy.gif" width="40%" height="30vh"/></a></td>
+				</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</div><br/>
+
+<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#collapseOne">
+					点击查看我的毕业论文，再次点击隐藏。
+				</a>
+			</h4>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapsing">
+			<div class="panel-body">
+				<p class="text-center" style="font-family:黑体; font-size:24px">摘&nbsp;&nbsp;要</p>
+				<p align="left" style="text-indent:2em; font-family:楷体; font-size:18px">新浪微博通过提取、归并被用户大量搜索的词条并按搜索指数排序，建立了实时热搜榜。该榜单能够较为客观地反映实时发生的热点事件。</p>
+				<p align="left" style="text-indent:2em; font-family:楷体; font-size:18px">通过对微博实时热点进行分析，可以为用户提供更为优质的热点资讯服务。本文设计并实现的就是这样一个系统。本文调研了国内外的微博分析系统和文本分类算法，设计出了适用于本系统的微博热点分类算法，实现了对微博热点的自动分类和分析。然后，本文设计了系统的框架，将系统划分为五大模块：数据获取模块，数据存储模块，机器学习模块，数据分析模块和前端展示模块。最终，本文用bootstrap前端框架和web.py后端框架实现了微博实时热点分析系统。</p><br/>
+				<p align="left" style="text-indent:2em; font-family:楷体; font-size:18px"><span style="font-family:黑体">关键词：</span>微博实时热点 热点分析 时间线 文本分类</p><br />
+                <p class="text-center" style="font-family:微软雅黑; font-size:18px">点击<a href="/static/files/paper.pdf" target="_blank">这里</a>查看/下载我的毕业论文全文</p>
+				
+
+			</div>
+		</div>
+	</div>
+
+<script>
+$$(function () { 
+	$$("[data-toggle='popover']").popover();
+	trigger: hover;
+});
+</script>

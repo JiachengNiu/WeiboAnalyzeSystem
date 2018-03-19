@@ -1,0 +1,243 @@
+﻿$def with (keyword, freqs, dates, items, results, words, sum_types, sum_values, type, imgsrc)
+<div class="page-header" align="center" style="margin-bottom:0px">
+    <blockquote style="margin-top:0px; margin-bottom:0px">
+        <h1 style="margin-top:-32px; margin-bottom:0px"><a href="/en">Real-time Hotspot in China</a></h1>
+        <small>Based on Sina Microblog Data</small>
+    </blockquote>
+    <!-- <p class="text-success" style="margin-top:-10px;margin-bottom:0px"><a href="\">中文版</a></p> -->
+</div>
+
+$code:
+	max_value = max(sum_values)
+	types = []
+	values = []
+	wordfreqs = []
+	wordlist = []
+	for i in results:
+		types.append(i[0])
+		values.append(i[1])
+	for i in words:
+		wordlist.append(i[0])
+		wordfreqs.append(i[1])
+
+$code:
+    typedict = {u'财经': 'Finance', u'萌宠': 'Pet', u'体育': 'Sports', u'婚庆': 'Wedding', u'综艺': 'Arts', u'情感': 'Emotions', u'美女模特': 'Beauty', u'军事': 'Military', u'设计': 'Design', u'收藏': 'Collection', u'政务': 'Government', u'国际': 'International', u'社会': 'Society', u'股市': 'Stock', u'游戏': 'Games', u'运动健身': 'Fitness', u'电影': 'Movie', u'育儿': ' Parenting', u'养生': 'Wellness', u'美妆': 'Makeup', u'科技': 'Technology', u'旅游': 'Travel', u'法律': 'Law', u'明星': 'Star', u'星座': 'Constellation', u'辟谣': 'Refute Rumor', u'艺术': 'Art', u'三农': 'Agriculture', u'搞笑': 'Funny', u'音乐': 'Music', u'校园': 'Campus', u'动漫': 'Anime', u'汽车': 'Car', u'读书': 'Reading', u'美图': 'Picture', u'房产': 'Estate', u'健康': 'Health', u'瘦身': 'Slimming', u'宗教': 'Religion', u'科普': 'Popular Science', u'历史': ' History ', u'家居': 'Home', u'电视剧': 'Drama', u'正能量': 'Positive Energy', u'数码': 'Digital', u'美食': 'Gourmet', u'时尚': 'Fashion'}
+
+
+
+<div style="margin-bottom:10px"><button type="button" class="btn btn-default btn-block" onclick="javascript:window.history.back(-1);">Back to Previous Page (返回上一页)</button></div>
+<h2 style="color:#FF8000">$keyword</h2>
+<span class="label label-default" style="margin-left:1%">$typedict[type]</span>
+<br/><span style="color:#CCCCCC">(Classification result based on Naive Baysian Model)</span><br/><br/>
+
+
+<!--
+<div id="radarMain" style="height:60vh; width:60vw"></div>
+<br/><br/>
+-->
+<div class="container" style="width:100%;border:1px solid #CCCCCC">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="lineMain" style="height:43vh; width:43vw"></div><br/><br/></div>
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="radarMain" style="height:43vh; width:43vw"></div>
+$for t in types:
+	<span class="label label-default" style="margin-left:1%">$typedict[t]</span>
+<br/><br/></div>
+</div>
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="barMain" style="height:43vh; width:43vw"></div></div>
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><span style="font-family:sans-serif; font-size:18px; color:#333333; font-style:normal; font-weight:bold">$keyword·Wordcloud</span><br/>
+<img src="$imgsrc" align="middle" style="height:43vh; width:35vw"/></div>
+</div>
+</div>
+<br/>
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_line = echarts.init(document.getElementById('lineMain'));
+	// 指定图表的配置项和数据
+	var option = {
+    "series": [
+        {
+            "type": "line", 
+            "data": $freqs, 
+            "name": "Hot Drgree"
+        }
+    ], 
+    "yAxis": [
+        {}
+    ], 
+    "legend": {
+		right: '20%',
+		top: '8%',
+        "data": [
+            "Hot Degree"
+        ], 
+        "orient": "horizontal"
+    }, 
+    "xAxis": [
+        {
+            "position": "bottom", 
+            "data": [
+			$for i in range(len(dates)):
+				$if i < len(dates) - 1:
+					"$dates[i]",
+				$else:
+					"$dates[i]"
+			], 
+			"axisLabel":{
+                show:true,
+                interval: $(len(dates)/10),  
+                rotate: 15,
+                margin: 8        
+            },
+            "type": "category"
+        }
+    ], 
+    "title": {
+        "text": "Variation Tendency of Hot Degree",
+		"left": "center"
+    }
+};
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart_line.setOption(option);
+</script>
+
+<script type="text/javascript">
+function escape2Html(str) { 
+ var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'}; 
+ return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];}); 
+}
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_radar = echarts.init(document.getElementById('radarMain'));
+	// 指定图表的配置项和数据
+	var option = {
+    title: {
+        text: 'Analysis Result Based on TF-IDF Weight',
+		"left": "center",
+    },
+    tooltip: {},
+    legend: {
+		right: '20%',
+		top: '8%',
+        data: ['Hotspot Component']
+    },
+    radar: {
+        // shape: 'circle',
+        indicator: [
+		$for t in sum_types:
+			{ name: '$typedict[t]', max: $max_value},
+        ]
+    },
+    series: [{
+        type: 'radar',
+        // areaStyle: {normal: {}},
+        data : [
+            {
+                value : [
+				$for v in sum_values:
+					$v,
+				],
+                name: 'Hotspot Component'
+            },
+        ]
+    }]
+};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart_radar.setOption(option);
+</script>
+
+
+<table id='table' class="table table-hover table-bordered table-striped" style="text-align:center">
+<thead class="table-bordered">
+	<tr>
+		<th data-align="center" data-sortable="True" data-valign="middle"><strong>Related Microblogs</strong></th>
+	</tr>	
+</thead>
+</table>
+
+<script>
+function escape2Html(str) { 
+ var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'}; 
+ return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];}); 
+}
+
+$$('#table').bootstrapTable({
+	search: 'True',
+	pagination: 'True',
+	sortStable: 'True',
+	pageSize: 10,
+	formatLoadingMessage: function(){
+    return;
+  },
+	data:
+	[
+	$for item in items:
+		["$item.content"],
+	]
+});
+</script>
+</br>
+
+
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_bar = echarts.init(document.getElementById('barMain'));
+	// 指定图表的配置项和数据
+	var option = {
+	"series": [
+		{
+			"type": "bar", 
+			"data": $wordfreqs, 
+			"name": "Word Frequency"
+		}
+	], 
+	"yAxis": [
+		{}
+	], 
+	"legend": {
+		right: '20%',
+		top: '8%',
+		"data": [
+			"Word Frequency"
+		], 
+		"orient": "horizontal"
+	}, 
+	"xAxis": [
+		{
+			"position": "bottom", 
+			"data": [
+			$for i in range(len(wordlist)):
+				$if i < len(wordlist) - 1:
+					"$wordlist[i]",
+				$else:
+					"$wordlist[i]"
+			],
+			"axisLabel":{
+                show:true,
+                interval: 0,  
+                rotate: 45,
+                margin: 8        
+            },
+			"type": "category"
+		}
+	], 
+	"title": {
+        "text": "Word Frequency Analysis of Hotspot-related Contents", 
+		"left": "center"
+	}
+};
+
+		// 使用刚指定的配置项和数据显示图表。
+		myChart_bar.setOption(option);
+		//window.onresize = myChart_bar.resize;
+</script>
+
+<script type="text/javascript">
+window.addEventListener("resize", function () {
+    myChart_line.resize();
+	myChart_radar.resize();
+	myChart_bar.resize();
+ });
+</script>

@@ -1,0 +1,78 @@
+<thead style="text-align:center" class="table-bordered">
+	<tr bgcolor="#666666" style="color:#FFFFFF">
+        <td data-field="rank"><strong>Rank</strong></td>
+        <td data-field="keyword"><strong>Keyword</strong></td>
+		<td data-field='date'><strong>Date</strong></td>
+		<td data-field="freq"><strong>Frequency</strong></td>
+		<td><strong>Hot Degree</strong></td>
+		<td><strong>Analysis</strong></th>
+	</tr>
+	<tr><form method="POST">
+        <td>
+		<div class="form-group">
+		<select class="form-control" name="t_rank">
+			<option value="">Please Select</option>
+			$for rank in ranklist:
+				$if x['t_rank'] != None and rank == x['t_rank']:	
+					<option value="$rank" selected="selected">$rank</option>
+				$else:
+					<option value="$rank">$rank</option>
+		</select>
+		</div>
+		</td>
+        <td>
+		<div class="form-group">
+		<select class="form-control" name="t_keyword">
+			<option value="">Please Select</option>
+			$for keyword in keywordlist:
+				$if x['t_keyword'] != None and keyword == x['t_keyword']:
+					<option value="$keyword" selected="selected">$keyword</option>
+				$else:
+					<option value="$keyword">$keyword</option>
+		</select>
+		</div>
+		</td>
+		<td>
+		<div class="form-group">
+		<select class="form-control" name="t_date">
+			<option value="">Please Select</option>
+			$for date in datelist:
+				$if x['t_date'] != None and date == x['t_date']:
+					<option value="$date" selected="selected">$date</option>
+				$else:
+					<option value="$date">$date</option>
+		</select>
+		</div>
+		</td>
+		<td>
+		<div class="form-group">
+		<select class="form-control" name="t_freq">
+			<option value="">Please Select</option>
+			$for freq in freqlist:
+				$if x['t_freq'] != None and freq == x['t_freq']:
+					<option value="$freq" selected="selected">$freq</option>
+				$else:
+					<option value="$freq">$freq</option>
+		</select>
+		</div>
+		</td>
+		<td colspan="2"><button class="btn btn-primary" type="submit">&nbsp;&nbsp;&nbsp;Filter&nbsp;&nbsp;&nbsp;</button></form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="\"><button class="btn btn-success">Clean Up</button></a></td>
+	</tr>
+</thead>
+
+<tbody>
+$ number = 0
+$for item in db_items:
+	$if number%50 == 0 and (x['keywords'] == None or x['keywords'] == '')  and (x['t_rank'] == None or x['t_rank'] == '') and (x['t_keyword'] == None or x['t_keyword'] == '') and (x['t_date'] == None or x['t_date'] == '') and (x['t_freq'] == None or x['t_freq'] == ''):
+		<tr><td colspan="6" bgcolor="#D4D4D4">Weibo Hot Search List at $item.date</td></tr>
+    <tr>
+        <td>$item.rank</td>
+        <td><a href="$item.link" target="_blank">$item.keyword</a></td>
+		<td>$item.date</td>
+		<td>$item.freq</td>
+		<td><div class="progress"><div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width:$(0.0001*item.freq)%;"></div>
+		</td>
+		<td><a href="$item.id">Analyze</a></td>
+    </tr>
+	$ number += 1 
+</tbody> 

@@ -1,0 +1,170 @@
+$def with (words, types, values, type, content)
+<div class="page-header" align="center" style="margin-bottom:0px">
+    <h1 style="margin-top:-20px"><a href="\">微博实时热点分析系统</a></h1>
+    <p class="text-success" style="margin-bottom:0px"><a href="/data/en">English Version</a></p>
+</div>
+
+$code:
+	if len(values) > 0:
+		max_value = max(values)
+	else:
+		max_value = 0
+	wordfreqs = []
+	wordlist = []
+	for i in words:
+		wordlist.append(i[0])
+		wordfreqs.append(i[1])
+	imgsrc = 'static/pictures/data.png' 
+		
+<ul class="nav nav-tabs nav-justified">
+	<li><a href="/">主页（系统介绍）</a></li>
+	<li><a href="/hotspot">实时热点</a></li>
+	<li><a href="weibo">热点相关微博</a></li>
+	<li><a href="timeline">时间线</a></li>
+	<li class="active"><a href="#">在线数据分析平台</a></li>
+</ul>
+<a href="/data"><button class="btn btn-default btn-block">刷&nbsp;&nbsp;新</button></a>
+<div style="margin-top:-20px"><form method="POST" role="form" style="width:60%">
+	<div class="form-group" style="margin-top:3%">
+		<label for="name" style="font-size:16px" style="background-color:#CCCCCC">请输入文本内容进行在线分析：</label>
+		<textarea class="form-control" rows="3" name="text">$content</textarea>
+	</div>
+	<div class="form-group" style="width:15%">
+		<button type="submit" class="btn btn-primary btn-block">分&nbsp;&nbsp;析</button>
+	</div>
+</form></div>
+
+
+$if len(types) > 0 and len(words) > 0:
+	基于朴素贝叶斯模型的分类结果：<br/><span class="label label-default" style="margin-left:1%">$type</span>
+	<br/><br/>
+
+	<div class="container" style="width:100%;border:1px solid #CCCCCC">
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="radarMain" style="height:43vh; width:43vw"></div></div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="barMain" style="height:43vh; width:43vw"></div></div>
+	</div>
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="border:1px solid #CCCCCC"><br/><span style="font-family:sans-serif; font-size:18px; color:#333333; font-style:normal; font-weight:bold">文本词云</span><br/>
+	<img src="$imgsrc" align="middle" style="width:50vw"/></div>
+	</div>
+	</div>
+	<br/>
+	
+$elif content != None and len(content) > 0:
+	您输入的文本信息太少，难以分析出有价值的内容，请输入更多文本<br/>
+	<div class="container" style="width:100%;border:1px solid #CCCCCC">
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><div id="barMain" style="height:43vh; width:43vw"></div></div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="border:1px solid #CCCCCC; height:50vh"><br/><span style="font-family:sans-serif; font-size:18px; color:#333333; font-style:normal; font-weight:bold">文本词云</span><br/><img src="$imgsrc" align="middle" style="height:43vh; width:35vw"/></div>
+	</div>
+	</div>
+	<br/>
+
+$else:
+	$pass
+	
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_radar = echarts.init(document.getElementById('radarMain'));
+	// 指定图表的配置项和数据
+	var option = {
+	title: {
+		text: '基于TF-IDF词权重的文本内容成分分析结果',
+		"left": "center"
+	},
+	tooltip: {},
+	legend: {
+		right: '20%',
+		top: '8%',
+		data: ['文本内容成分']
+	},
+	radar: {
+		// shape: 'circle',
+		indicator: [
+		$for t in types:
+			{ name: '$t', max: $max_value},
+		]
+	},
+	series: [{
+		type: 'radar',
+		// areaStyle: {normal: {}},
+		data : [
+			{
+				value : [
+				$for v in values:
+					$v,
+				],
+				name : '文本内容成分'
+			},
+		]
+	}]
+};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart_radar.setOption(option); 
+</script>
+
+<script type="text/javascript">
+	// 基于准备好的dom，初始化echarts实例
+	var myChart_bar = echarts.init(document.getElementById('barMain'));
+	// 指定图表的配置项和数据
+	var option = {
+	"series": [
+		{
+			"type": "bar", 
+			"data": $wordfreqs, 
+			"name": "词频"
+		}
+	], 
+	"yAxis": [
+		{}
+	], 
+	"legend": {
+		right: '20%',
+		top: '8%',
+		"data": [
+			"词频"
+		], 
+		"orient": "horizontal"
+	}, 
+	"xAxis": [
+		{
+			"position": "bottom", 
+			"data": [
+			$for i in range(len(wordlist)):
+				$if i < len(wordlist) - 1:
+					"$wordlist[i]",
+				$else:
+					"$wordlist[i]"
+			],
+			"axisLabel":{
+				show:true,
+				interval: 0,  
+				rotate: 45,
+				margin: 8        
+			},
+			"type": "category"
+		}
+	], 
+	"title": {
+		"text": "热点相关内容高频词频统计分析", 
+		"left": "center"
+	}
+};
+
+	// 使用刚指定的配置项和数据显示图表。
+	myChart_bar.setOption(option);
+</script>
+
+<script type="text/javascript">
+window.addEventListener("resize", function () {
+	myChart_radar.resize();
+	myChart_bar.resize();
+ });
+</script>
+
+
+
+
+

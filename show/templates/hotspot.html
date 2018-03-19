@@ -1,0 +1,161 @@
+$def with (items, x)
+<div class="page-header" align="center" style="margin-bottom:0px">
+    <h1 style="margin-top:-20px"><a href="\">微博实时热点分析系统</a></h1>
+    <p class="text-success" style="margin-bottom:0px"><a href="/hotspot/en">English Version</a></p>
+</div>
+	
+$code:
+	def option_char(list, x, type):
+		char = '<div class="form-group"><select class="form-control" name="t_' + type +'"><option value="">Please Select</option>'
+		for i in list:
+			if x['t_'+type] != None and i == x['t_'+type]:	
+				char = char + '<option value="' + i + '" selected="selected">' + i +'</option>'
+			else:
+				char = char + '<option value="' + i + '">' + i + '</option>'
+		char += '</select></div>'
+		return char
+		
+	db_items = []
+	ranklist = ['1 - 3', '4 - 10', '11 - 50']
+	typelist = [u'育儿',  u'萌宠',  u'体育',  u'婚庆',  u'综艺',  u'情感',  u'艺术',  u'军事',  u'设计',  u'电视剧',  u'正能量',  u'社会',  u'股市',  u'游戏',  u'收藏',  u'运动健身',  u'财经',  u'养生', u'美妆',  u'科技',  u'旅游',  u'法律',  u'明星',  u'星座',  u'辟谣', u'美女模特',  u'三农',  u'搞笑',  u'音乐',  u'校园',  u'动漫',  u'汽车',  u'读书',  u'美图',  u'房产',  u'健康',  u'瘦身',  u'宗教',  u'政务',  u'科普',  u'历史',  u'家居',  u'电影',  u'国际',  u'数码',  u'美食',  u'时尚']
+	keywordlist = []
+	freqlist = ['<= 30000', '30001 - 100000', '100001 - 500000', '> 500000']
+	datelist = []
+	for i in items:
+		if i.keyword not in keywordlist:
+			keywordlist.append(i.keyword)
+		if i.date not in datelist:
+			datelist.append(i.date)
+		db_items.append(i)
+
+	datelist.sort(reverse=True)
+	char_rank = '<form method="POST">' + option_char(ranklist, x, 'rank')
+	char_keyword = option_char(keywordlist, x, 'keyword')
+	char_freq = option_char(freqlist, x, 'freq')
+	#char_date = option_char(datelist, x, 'date')
+
+<ul class="nav nav-tabs nav-justified">
+	<li><a href="/">主页（系统介绍）</a></li>
+	<li class="active"><a href="#">实时热点</a></li>
+	<li><a href="weibo">热点相关微博</a></li>
+	<li><a href="timeline">时间线</a></li>
+	<li><a href="data">在线数据分析平台</a></li>
+</ul>
+<div style="padding:20px">
+	<center><form method="POST" class="bs-example bs-example-form" role="form" style="width:50%">
+			<div class="input-group">
+				<input type="text" name="keywords" class="form-control"  placeholder="在此处输入关键词检索相关热点" value="$x['keywords']">
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="submit">
+						搜索
+					</button>
+				</span>
+			</div><!-- /input-group -->
+		</div><!-- /.row -->
+	</form></center>
+</div></center>
+<div style="margin-bottom:-20px">
+<table class="table table-condensed table-bordered" style="text-align:center" width="100%">
+<tr bgcolor="#ddd" style="color:#FFFFFF"><form method="POST">
+        <td width="7.5%" style="vertical-align:middle !important">
+		<div class="form-group" style="margin-bottom:0px">
+		<select class="form-control" name="t_rank">
+			<option value="">请选择排名</option>
+			$for rank in ranklist:
+				$if x['t_rank'] != None and rank == x['t_rank']:	
+					<option value="$rank" selected="selected">$rank</option>
+				$else:
+					<option value="$rank">$rank</option>
+		</select>
+		</div>
+		</td>
+		<td width="7.5%" style="vertical-align:middle !important">
+		<div class="form-group" style="margin-bottom:0px">
+		<select class="form-control" name="t_type">
+			<option value="">请选择类别</option>
+			$for type in typelist:
+				$if x['t_type'] != None and type == x['t_type']:	
+					<option value="$type" selected="selected">$type</option>
+				$else:
+					<option value="$type">$type</option>
+		</select>
+		</div>
+		</td>
+        <td width="25%" style="vertical-align:middle !important">
+		<div class="form-group" style="margin-bottom:0px">
+		<select class="form-control" name="t_keyword">
+			<option value="">请选择关键词</option>
+			$for keyword in keywordlist:
+				$if x['t_keyword'] != None and keyword == x['t_keyword'].encode('utf8'):
+					<option value="$keyword" selected="selected">$keyword</option>
+				$else:
+					<option value="$keyword">$keyword</option>
+		</select>
+		</div>
+		</td>
+		<td width="20%" style="vertical-align:middle !important">
+		<div class="form-group" style="margin-bottom:0px">
+		<select class="form-control" name="t_date">
+			<option value="">请选择日期</option>
+			$for date in datelist:
+				$if x['t_date'] != None and date == x['t_date']:
+					<option value="$date" selected="selected">$date</option>
+				$else:
+					<option value="$date">$date</option>
+		</select>
+		</div>
+		</td>
+		<td width="10%" style="vertical-align:middle !important">
+		<div class="form-group" style="margin-bottom:0px">
+		<select class="form-control" name="t_freq">
+			<option value="">请选择搜索指数</option>
+			$for freq in freqlist:
+				$if x['t_freq'] != None and freq == x['t_freq']:
+					<option value="$freq" selected="selected">$freq</option>
+				$else:
+					<option value="$freq">$freq</option>
+		</select>
+		</div>
+		</td>
+		<td colspan="2" width="30%" style="vertical-align:middle !important"><button class="btn btn-primary" type="submit">&nbsp;&nbsp;筛 选&nbsp;&nbsp;</button></form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/hotspot"><button class="btn btn-success">&nbsp;&nbsp;清 空&nbsp;&nbsp;</button></a></td>
+	</tr>
+</table></div>
+<table id='table' class="table table-hover table-bordered table-striped" style="text-align:center">
+<thead class="table-bordered">
+	<tr>
+        <th data-align="center" data-sortable="True" data-valign="middle" data-width="7.5%"><strong>排名</strong></th>
+		<th data-align="center" data-sortable="True" data-valign="middle" data-width="7.5%"><strong>类别</strong></th>
+        <th data-align="center" data-sortable="True" data-valign="middle" data-width="25%"><strong>关键词</strong></th>
+		<th data-align="center" data-sortable="True" data-valign="middle" data-width="20%"><strong>日期</strong></th>
+		<th data-align="center" data-sortable="True" data-valign="middle" data-width="10%"><strong>搜索指数</strong></th>
+		<th data-align="center" data-valign="middle" data-width="20%"><strong>搜索热度</strong></th>
+		<th data-align="center" data-valign="middle" data-width="10%"><strong>在线分析</strong></th>
+	</tr>
+	
+</thead>
+
+
+
+</table>
+
+<script>
+function escape2Html(str) { 
+ var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'}; 
+ return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];}); 
+}
+
+$$('#table').bootstrapTable({
+	
+	pagination: 'True',
+	sortStable: 'True',
+	pageSize: 50,
+	formatLoadingMessage: function(){
+    return;
+  },
+	data:
+	[
+	$for item in db_items:
+		[$item.rank, "<span class='label label-default'>$item.type</span>", "<a href='$item.link' target='blank'>$item.keyword</a>","$item.date", $item.freq, "<div class='progress'><div class='progress-bar progress-bar-warning' role='progressbar' aria-valuenow='30' aria-valuemin='0' aria-valuemax='100' style='width:$(0.0001*item.freq)%;'>", "<a href='$item.keyword'>点击分析</a>"],
+	]
+});
+</script>

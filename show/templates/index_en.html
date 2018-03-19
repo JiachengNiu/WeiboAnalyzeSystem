@@ -1,0 +1,181 @@
+$def with ()
+<div class="page-header" align="center" style="margin-bottom:0px">
+    <blockquote style="margin-top:0px; margin-bottom:0px">
+        <h1 style="margin-top:-32px; margin-bottom:0px"><a href="/en">Real-time Hotspot in China</a></h1>
+        <small>Based on Sina Microblog Data</small>
+    </blockquote>
+        <p class="text-success" style="margin-top:-10px;margin-bottom:0px"><a href="\">中文版</a></p>
+</div>
+
+<ul class="nav nav-tabs nav-justified">
+	<li class="active" id='home'><a href="#">Homepage (Introduction)</a></li>
+	<li id='hotspot'><a href="/hotspot/en">Real-time Hotspot List</a></li>
+	<li id='weibo'><a href="/weibo/en">Related Microblog</a></li>
+	<li id='timeline'><a href="/timeline/en">Timeline</a></li>
+	<li id='platform'><a href="/data/en">Data Analysis Platform</a></li>
+</ul><br/>
+<div class="container" style="width:100%">
+<div class="row">
+
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Framework
+				</h3>
+			</div>
+			<div class="panel-body">
+				<img src="static/pictures/frame_en.png" width="100%"/>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Introduction
+				</h3>
+			</div>
+			<div class="panel-body">
+				<p align="left" style="text-indent:2em">Sina Microblog sets up a real-time hotspot list by extracting and merging the entries frequently searched by users. The list can objectively reflect the hot events happening in real time. My system aims to provide users with high-quality hotspot information services through microblog real-time hotspot analysis, so as to realize hotspot tracking, public opinion monitoring and other functions.</p>				
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Modules
+				</h3>
+			</div>
+			<div class="panel-body" align="left">
+				<ul>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Data Acquisition Module" data-container="body" data-placement="right" data-content="<p align='left'>Data acquisition module mainly obtains three types of data: microblog Real-time hotspot list, hotspot-related microblogs corresponding to the results of the search page of the hotspot, popular microblogs and their corresponding categories. The first two types of data are directly transfered to the data storage module (database) to save, the last category of data are saved in the form of text documents in local, as a training set for machine learning module.</p>">Data Acquisition Module</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Data Storage Module" data-container="body" data-placement="right" data-content="<p align='left'>The data storage module of this system is MySQL database. After data storage module receives the SELECT (query) statement input by data analysis module, the corresponding SQL query results are output and will be analyzed by data analysis module.</p>">Data Storage Module</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Machine Learning Module" data-container="body" data-placement="right" data-content="<p align='left'>The machine learning module is relatively independent from the other modules of the system, does not need to interact with the database of the data storage module, after a machine learning training, the classifier model can be used for the system until the system needs to update the training set or algorithm of machine learning.</p>">Machine Learning Module</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Data Analysis Module" data-container="body" data-placement="right" data-content="<p align='left'>The data analysis module is the core of the whole system, and all the data that users see on the front of the system comes from the data analysis module. Data Analysis module bases on the request of the front-end, generates SQL query statements to data storage module, gets the corresponding query results, then does specific data analysis according to the requirements. And the analysis result will output to the front-end of the system to display for users.</p>">Data Analysis Module</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Front-end Display Module" data-container="body" data-placement="right" data-content="<p align='left'>Front-end Display module is the facade of the system, it mainly implements data visualization function, users can directly contact to pages from front-end display module.</p>">Front-end Display Module</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Functions
+				</h3>
+			</div>
+			<div class="panel-body" align="left">
+				<ul>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Hotspot Auto Classification" data-container="body" data-placement="right" data-content="<p align='left'>The implementation of this function needs to get the search results of microblogs for the hotspot. Then the results of microblogs are used as the extension of the semantic and feature of the original hotspot, and they are combined into a Chinese text unit with a larger amount of data, then sorted by the built-in Chinese text classifier of this system.</p>">Hotspot Auto Classification</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Data Analysis Platform" data-container="body" data-placement="right" data-content="<p align='left'>The function is to provide users with data analysis port, the text data is provided by users, and the system will finish the statistical analysis, category composition analysis and generate a wordcloud picture.</p>">Data Analysis Platform</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Hotspot and Microblog Crawling" data-container="body" data-placement="right" data-content="<p align='left'>The system data source all comes from Sina Microblog, the system has the corresponding crawlers, can obtain the data from Sina and extract the required fields, and then put them into the database for system query and analysis.</p>">Hotspot and Microblog Crawling</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Data-driven Chart" data-container="body" data-placement="right" data-content="<p align='left'>This system uses the Echarts frame, the system will doing data analysis and use JS codes to generate the corresponding chart.</p>">Data-driven Chart</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Data-driven Timeline" data-container="body" data-placement="right" data-content="<p align='left'>For all the hotspots in the system, the system provides a dedicated page that shows a coherent timeline to users, and each time point on the timeline corresponds to a hotspot event that occured at that time.</p>">Data-driven Timeline</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Data-driven Wordcloud Picture" data-container="body" data-placement="right" data-content="<p align='left'>The system on the back-end will cut words and do frequency statistics. The system will adjust the size of the word image basing on the frequency of each word, and save to the picture directory, and then on the front-end, wordcloud pictures will be displayed to users.</p>">Data-driven Wordcloud Picture</a>
+					</li>
+					<li>
+					<a href="#" data-toggle="popover" data-trigger="hover" data-html="true" title="Search, Filter and Facet Classification" data-container="body" data-placement="right" data-content="<p align='left'>Users can search for keywords or set filter criteria on the front-end of the system to perform data filtering, and then the system will interact with the database and display the resultsd, allowing users to quickly find the results they need.</p>">Search, Filter and Facet Classification</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+                    Special Thanks
+				</h3>
+			</div>
+			<div class="panel-body">
+				<p align="left">As the final result of my graduation thesis, the time and energy this system spent for me is unprecedented. Only the online version of the system has been updated for more than 10 times, and the corresponding papers are constantly modified. But of course, the completion of the final system brought me a sense of unmatched achievement.</p>
+				<p align="left">Here, I want to thank my tutor, Professor Wang Jimin, his guidance has kept my thesis in the right direction. Thanks to the Department of Information Management in Peking University, the knowledge and skills I have learned in the past four years have allowed me to realize this system in the end. Thanks to development teams of the Open Source Toolkit, which allow me to integrate a variety of cool features in my system, you are the direction of my efforts.</p>
+			</div>
+		</div>
+	</div>	
+</div>
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Tools Used
+				</h3>
+			</div>
+			<div class="panel-body" style="background-image:url(static/pictures/tools/bg.jpg); background-size: cover; color:#FFFFFF; font-size:20px">
+				<table width="100%" class="table table-bordered" style="text-align:center; font-family:'Times New Roman'; margin-bottom:0px">
+				<tr>
+				<td width="25%" style="vertical-align:middle !important">Front-end</td>
+				<td width="25%"><a href="http://echarts.baidu.com/" target="_blank"><img src="static/pictures/tools/echarts.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://getbootstrap.com/" target="_blank"><img src="static/pictures/tools/bootstrap.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://jquery.com/" target="_blank"><img src="static/pictures/tools/jquery.png" width="40%" height="30vh"/></a></td>
+				</tr>
+				<tr>
+				<td width="25%" style="vertical-align:middle !important">Back-end</td>
+				<td width="25%"><a href="https://www.python.org/" target="_blank"><img src="static/pictures/tools/python.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://scikit-learn.org/stable/" target="_blank"><img src="static/pictures/tools/scikit-learn.png" width="40%" height="30vh"/></a></td>
+				<td width="25%"><a href="http://webpy.org/" target="_blank"><img src="static/pictures/tools/webpy.gif" width="40%" height="30vh"/></a></td>
+				</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</div><br/>
+
+<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#collapseOne">
+					Click to see my graduation thesis, click again to hide it.
+				</a>
+			</h4>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapsing">
+			<div class="panel-body">
+				<p class="text-center" style="font-family:'Times New Roman'; font-size:24px"><strong>Abstract</strong></p>
+                <p class="text-center" style="font-family:'Times New Roman'; font-size:18px">Niu Jiacheng (Information Management and Information System)</p>
+				<p align="left" style="font-family:'Times New Roman'; font-size:18px">With the rapid development of the Internet, Sina Microblog as a new generation of network media, has become a distribution center of mass information. On this basis, Sina Microblog set up a real-time hot search list based on users’ searching data. The list reflects the real-time hotspot objectively and becomes an important channel for users to get hotspot information. By analyzing the real-time hotspot of Microblog, we can provide users with higher-quality hotspot information service, and reach the goal of hotspot pursuit and public opinion monitoring.</p>
+				<p align="left" style="font-family:'Times New Roman'; font-size:18px">This paper is exactly the design and implementation of a Microblog real-time hotspot analysis system. This paper investigates Microblog analysis systems, real-time hotspot analysis methods and short text classification algorithms at home and abroad, then designs the classification algorithm suitable for Microblog real-time hotspots, realizes the automatic classification of Microblog hotspots. After that, this paper designs the functions, the framework and the database structure of this system, divides the system into five modules: Data acquisition module, data storage module, machine learning module, data analysis module and front-end display module. Finally, the whole system is realized with bootstrap front-end frame and web.py back-end framework.</p><br/>
+				<p align="left" style="font-family:'Times New Roman'; font-size:18px"><strong>Keywords: </strong>Microblog real-time hotspot  &nbsp;&nbsp;Data analysis  &nbsp;&nbsp;Text classification  &nbsp;&nbsp;Bayesian model  &nbsp;&nbsp;TF-IDF algorithm</p><br />
+                <p align="center" style="font-family:'Times New Roman'; font-size:18px">Click <a href="static/files/paper.pdf" target="_blank">here</a> to view/download my whole graduation thesis.</p>
+				
+
+			</div>
+		</div>
+	</div>
+
+<script>
+$$(function () { 
+	$$("[data-toggle='popover']").popover();
+	trigger: hover;
+});
+</script>
